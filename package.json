@@ -1,0 +1,13 @@
+{
+  "name": "community-queues",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "envy": "^2.0.0"
+  },
+  "scripts": {
+    "start": "node ."
+  }
+}
