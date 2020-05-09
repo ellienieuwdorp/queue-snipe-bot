@@ -21,8 +21,7 @@ function addPlayer(player, msg = undefined) {
 
 //abstracting join lets us edit and see it easier, instead of inside the tangle of ifs in the callback. 
 function join(msg) {
-    msg.delete();
-    if (playerList.length > (captainList.length * 2)) {
+    if (playerList.length >= (captainList.length * 2)) {
         msg.reply('The queue is currently full.');
         return [...playerList];
     }
