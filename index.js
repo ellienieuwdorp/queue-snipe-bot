@@ -8,7 +8,26 @@ const token = envy().token;
 let playerList = [];
 let captainList = [];
 
-const prefix = '!'
+const prefix = '!';
+
+//abstracting addPlayer will let us use it in other scenarios, esp. automated testing.
+function addPlayer(player, msg = undefined) {
+    if (playerList.includes(player)) {
+        if (msg != undefined) { msg.reply(`You are already queued up! If you would like to leave, please use ${prefix}leave`); };
+        return [...playerList];
+    };
+    return [...playerList, player];
+};
+
+//abstracting join lets us edit and see it easier, instead of inside the tangle of ifs in the callback. 
+function join(msg) {
+    if (playerList.length >= (captainList.length * 2)) {
+        msg.reply('The queue is currently full.');
+        return [...playerList];
+    }
+    msg.reply('Adding you to the queue...');
+    return addPlayer(msg.author.id);
+};
 
 client.login(token);
 
@@ -23,8 +42,8 @@ client.on('message', msg => {
     const command = args.shift().toLowerCase();
 
     if (command === 'join') {
-        playerList.push(msg.author)
-        msg.reply('you have been added to player pool.')
+        playerList = join(msg);
+        console.log(playerList);
     }
 
     if (command === 'addcaptains') {
