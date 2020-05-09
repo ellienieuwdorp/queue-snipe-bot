@@ -10,9 +10,17 @@ let captainList = [];
 
 const prefix = '!'
 
+// Role that is authorized to call privileged commands
+const authorizedRole = 'Mods';
+
 // Returns true if the author of the message is privileged
 function isAuthorizedMessage(msg) {
-    return msg.hasOwnProperty('member') && msg.member.hasPermisison('ADMINISTRATOR'); // TODO what constitutes authorized?
+    if('member' in msg) {
+        if(msg.member.roles.cache.find(r => r.name === authorizedRole)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 client.login(token);
