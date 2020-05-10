@@ -31,7 +31,7 @@ function join(msg) {
 
 // Returns true if the author of the message is privileged
 function isAuthorizedMessage(msg) {
-    return true; // TODO implement
+    return ('member' in msg) && msg.member.hasPermisison('ADMINISTRATOR');
 }
 
 client.login(token);
