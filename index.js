@@ -10,12 +10,28 @@ let captainList = [];
 
 const prefix = '!';
 
+// A new way to manipulate an array into a string, for better readability
+function concatArray(arr) {
+    let s = "";
+    arr.forEach(function(v, n) {
+        s = s + v
+        if (arr.length > n+1) s = s + ', '
+    });
+    return s;
+}
+
+// convert id to Discord user mentionable 
+function convertIdToTag(id) {
+    return client.users.cache.get(id).toString();
+};
+
 //abstracting addPlayer will let us use it in other scenarios, esp. automated testing.
 function addPlayer(player, msg = undefined) {
     if (playerList.includes(player)) {
         if (msg != undefined) { msg.reply(`You are already queued up! If you would like to leave, please use ${prefix}leave`); };
         return [...playerList];
     };
+    if (msg != undefined) msg.reply(`You were added to the queue! Please wait...`)
     return [...playerList, player];
 };
 
@@ -24,9 +40,35 @@ function join(msg) {
     if (playerList.length >= (captainList.length * 2)) {
         msg.reply('The queue is currently full.');
         return [...playerList];
-    }
+    };
     msg.reply('Adding you to the queue...');
-    return addPlayer(msg.author.id);
+    return addPlayer(msg.author.id, msg);
+};
+
+//abstracting addCaptain will let us use it in other scenarios, esp. automated testing
+function addCaptain(captain) {
+    if (captainList.includes(captain)) {
+        console.log('Attempted to add captain already in list.');
+        return [...captainList];
+    };
+    return [...captainList, captain]
+};
+
+function addCaptains(msg) {
+    const captains = msg.mentions.users;
+    if (captains.size > 0) {
+        captains.forEach(function(obj, snowflake) {
+            captainList = addCaptain(snowflake);
+        });
+        const s = [];
+        captainList.forEach(function(n) {
+            s.push(convertIdToTag(n))
+        })
+        msg.reply(`The captain list is now: ${concatArray(s)}`)
+        return
+    };
+    msg.reply('Please mention the users you want to add as captains after the command. Example: ```!addcaptains @user1 @user2```');
+
 };
 
 client.login(token);
@@ -47,19 +89,8 @@ client.on('message', msg => {
     }
 
     if (command === 'addcaptains') {
-        const mentionedUsers = msg.mentions.users;
-        if (mentionedUsers.size === 0) {
-            msg.reply('please mention the users you want to add as captains after the command. Example: ```!addcaptains @user1 @user2```');
-        }
-        if (mentionedUsers.size > 0) {
-            let usersString = "";
-            mentionedUsers.forEach(function(user) {
-                usersString += (user.username + " ");
-                captainList.push(user);
-            });
-
-            msg.reply('the following users have been added to the list of captains: ' + usersString)
-        }
+        addCaptains(msg);
+        console.log(captainList);
     }
 
     if (command === 'removecaptain') {
