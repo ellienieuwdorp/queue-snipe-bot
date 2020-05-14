@@ -12,7 +12,9 @@ node_modules/
 
 ### Visual Studio Code ###
 .vscode/*
-.code-workspace
+*.code-workspace
+
+.history/*
 
 
 ### VIM (From https://github.com/github/gitignore) ###
