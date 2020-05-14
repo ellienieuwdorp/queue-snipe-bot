@@ -94,11 +94,17 @@ client.on('message', msg => {
     }
 
     if (command === 'addcaptains') {
+        if (!isAuthorizedMessage(msg)) {
+            return;
+        }
         addCaptains(msg);
         console.log(captainList);
     }
 
     if (command === 'removecaptain') {
+        if (!isAuthorizedMessage(msg)) {
+            return;
+        }
         const indexOfCaptain = captainList.indexOf(msg.mentions.users.first())
         if (indexOfCaptain === -1) {
             msg.reply('captain was not removed because they were not on the list of team captains.')
