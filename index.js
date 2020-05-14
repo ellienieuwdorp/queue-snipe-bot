@@ -31,7 +31,7 @@ function addPlayer(player, msg = undefined) {
         if (msg != undefined) { msg.reply(`You are already queued up! If you would like to leave, please use ${prefix}leave`); };
         return [...playerList];
     };
-    if (msg != undefined) msg.reply(`You were added to the queue! Please wait...`)
+    if (msg != undefined) msg.reply('You were added to the queue!')
     return [...playerList, player];
 };
 
