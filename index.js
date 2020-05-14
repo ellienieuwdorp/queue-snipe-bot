@@ -29,6 +29,11 @@ function join(msg) {
     return addPlayer(msg.author.id);
 };
 
+// Returns true if the author of the message is privileged
+function isAuthorizedMessage(msg) {
+    return ('member' in msg) && msg.member.hasPermisison('ADMINISTRATOR');
+}
+
 client.login(token);
 
 client.on('ready', () => {
