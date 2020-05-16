@@ -7,6 +7,11 @@ Discord bot intended to simplify queue sniping in Apex Legends using a system of
 3. ```yarn start```
 
 ## Contributing
+
+### Coding standards
+We are using the google style guide, see: https://google.github.io/styleguide/jsguide.html
+
+### Project info
 For any lovelies from the server who would like to contribute, the general idea of the application is as follows:
 
 Using a command, mods will be able to add and remove team captains.
