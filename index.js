@@ -25,6 +25,11 @@ function convertIdToTag(id) {
     return client.users.cache.get(id).toString();
 };
 
+// convert id to Discord channel nickname
+function convertIdToNick(id) {
+    return client.users.cache.get(id).tag;
+}
+
 //abstracting addPlayer will let us use it in other scenarios, esp. automated testing.
 function addPlayer(player, msg = undefined) {
     if (playerList.includes(player)) {
@@ -119,9 +124,44 @@ client.login(token);
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
+// The following is messy, but we need a mvp, so here we go
+// The function to distribute players to captains; recursive, so if it is not out of players, it can keep going
+function distributePlayers(msg, captains) {
+    captains.forEach(function(v){
+        if (v.length < 2) {
+            v.push(...playerList.splice(Math.floor(Math.random() * playerList.length)));
+        }
+    });
+    console.log(captains)
+    if (playerList.length > 0) {
+        distributePlayers(msg, captains)
+    } else {
+        let mstr = '```'
+        let i = 1
+        captains.forEach(function(v, k) {
+            mstr = mstr + `Team ${i}: ${convertIdToNick(k)}, `;
+            console.log(`Made it here with ${mstr}`)
+            v.forEach(function(player, i) {
+                console.log(`Adding player ${convertIdToNick(player)}`)
+                mstr = mstr + `${convertIdToNick(player)}`
+                if (i < v.length-1) {mstr = mstr + ','};
+                mstr = mstr + ' ';
+            }); 
+            console.log(v); 
+            mstr = mstr + '\n';
+            i++;
+        })
+        console.log(mstr)
+        msg.reply(mstr + '```')
+    }
+}
 
-function distribute() {
-    // TO-DO
+function distribute(msg) {
+    let captains = new Map();
+    captainList.forEach(function(v) {
+        captains.set(v, [])
+    });
+    distributePlayers(msg, captains)
 }
 
 client.on('message', msg => {
@@ -155,7 +195,8 @@ client.on('message', msg => {
         if (!isAuthorizedMessage(msg)) {
             return;
         }
-        distribute();
+        console.log('Distributing players, prepare yourself...')
+        distribute(msg);
     }
 });
 
