@@ -8,8 +8,4 @@ RUN npm install
 
 COPY . /usr/src/bot
 
-# Use BOT_TOKEN env variable as the token in this docker image
-RUN echo "BOT_TOKEN=\${BOT_TOKEN}" > /usr/src/bot/.env
-RUN chmod 600 /usr/src/bot/.env
-
-CMD ["node", "index.js"]
+CMD echo "BOT_TOKEN=${BOT_TOKEN}" > /usr/src/bot/.env && chmod 600 /usr/src/bot/.env && node index.js
