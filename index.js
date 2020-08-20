@@ -44,14 +44,30 @@ function addPlayer(player, msg = undefined) {
   return [...playerList, player];
 }
 
+function removePlayer(playerSnowflake) {
+  const snowflakeIndex = playerList.indexOf(playerSnowflake);
+
+  if (snowflakeIndex === -1) {
+    console.log("Attempted to remove captain not in the list.");
+    return [...playerList];
+  }
+
+  playerList.splice(snowflakeIndex, 1);
+  return [...playerList];
+}
+
 //abstracting join lets us edit and see it easier, instead of inside the tangle of ifs in the callback.
 function join(msg) {
   if (playerList.length >= captainList.length * 2) {
     msg.reply("The queue is currently full.");
     return [...playerList];
   }
-  msg.reply("Adding you to the queue...");
   return addPlayer(msg.author.id, msg);
+}
+
+function leave(msg) {
+  msg.reply("Removed you from the queue!");
+  return removePlayer(msg.author.id);
 }
 
 //abstracting addCaptain will let us use it in other scenarios, esp. automated testing
@@ -120,7 +136,11 @@ function removeCaptain(captainSnowflake) {
 
 // Returns true if the author of the message is privileged
 function isAuthorizedMessage(msg) {
-  return "member" in msg && (msg.member.hasPermission("ADMINISTRATOR") || msg.member.roles.cache.find((r) => r.name === "Queue Snipe Admin"));
+  return (
+    "member" in msg &&
+    (msg.member.hasPermission("ADMINISTRATOR") ||
+      msg.member.roles.cache.find((r) => r.name === "Queue Snipe Admin"))
+  );
 }
 
 client.login(token);
@@ -214,6 +234,11 @@ client.on("message", (msg) => {
     }
     playerList = [];
     captainList = [];
-    msg.reply("The player and captain lists have been emptied.")
+    msg.reply("The player and captain lists have been emptied.");
+  }
+
+  if (command === "leave") {
+    playerList = leave(msg);
+    console.log(playerList);
   }
 });
