@@ -32,6 +32,8 @@ services:
 
 5. Run `docker ps` or `docker logs CONTAINER_NAME` to check the status/logs of the container.
 
+TO-DO: simplify and seperate docker-compose and docker run setup because it can be done a lot easier (:
+
 ## Contributing
 
 ### Coding standards
