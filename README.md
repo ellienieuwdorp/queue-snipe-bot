@@ -9,17 +9,16 @@ Discord bot intended to simplify queue sniping in Apex Legends using a system of
 3. `npm start`
 
 ## Docker setup instructions
-
 If you'd like to run the bot in a docker container, you can do so using docker or docker-compose
 
 ### docker-compose (recommended)
-1. Clone the repository: `git clone https://github.com/luuknieuwdorp/community-queues`
+1. Clone the repository: `git clone https://github.com/luuknieuwdorp/community-queues.git`
 2. `cd community-queues`
-3. Change the YOUR_BOT_TOKEN in `docker-compose.yml` to your discord bot token.
+3. Change the YOUR_BOT_TOKEN environment variable in `docker-compose.yml` to your Discord bot token.
 4. `docker-compose up -d`
 
 ### docker
-1. Clone the repository: `git clone https://github.com/luuknieuwdorp/community-queues`
+1. Clone the repository: `git clone https://github.com/luuknieuwdorp/community-queues.git`
 2. `cd community-queues`
 3. Build the docker image, where IMAGE_NAME is the name you can specify for the built docker image: `docker build -t IMAGE_NAME .`
 4. Run the docker image: `docker run -d IMAGE_NAME --env BOT_TOKEN=YOUR_BOT_TOKEN`
