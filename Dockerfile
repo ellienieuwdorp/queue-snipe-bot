@@ -9,4 +9,4 @@ RUN npm install
 
 COPY . /usr/src/bot
 
-CMD echo "BOT_TOKEN=${BOT_TOKEN}" > /usr/src/bot/.env && chmod 600 /usr/src/bot/.env && node index.js
+CMD echo "BOT_TOKEN=${BOT_TOKEN}" > /usr/src/bot/.env && chmod 600 /usr/src/bot/.env && node src/index.js
