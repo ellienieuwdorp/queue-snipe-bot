@@ -7,6 +7,9 @@ RUN mkdir -p /usr/src/bot
 WORKDIR /usr/src/bot
 
 COPY package.json /usr/src/bot
+
+RUN npm install -g node-gyp
+RUN npm install build-tools  -g
 RUN npm install
 
 COPY . /usr/src/bot
