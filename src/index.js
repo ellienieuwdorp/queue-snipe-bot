@@ -1,14 +1,28 @@
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const path = require('path');
+const util = require('./util');
+const client = util.client;
 
-// Retrieve bot token using envy
+client.registry
+	.registerDefaultTypes()
+	.registerGroups([
+		['admin', 'admin commands'],
+		['player', 'player commands'],
+	])
+	.registerDefaultGroups()
+	.registerDefaultCommands()
+	.registerCommandsIn(path.join(__dirname, 'commands'));
+
 const envy = require('envy');
 const token = envy().botToken;
 
-let playerList = [];
-let captainList = [];
+client.login(token);
 
-const prefix = '!';
+client.once('ready', () => {
+	console.log(`Logged in as ${client.user.tag}! (${client.user.id})`);
+});
+
+const playerList = [];
+let captainList = [];
 
 // A new way to manipulate an array into a string, for better readability
 function concatArray(arr) {
@@ -20,22 +34,13 @@ function concatArray(arr) {
 	return s;
 }
 
-// convert id to Discord user mentionable
-function convertIdToTag(id) {
-	return client.users.cache.get(id).toString();
-}
-
-// convert id to Discord channel nickname
-function convertIdToNick(id) {
-	return client.users.cache.get(id).tag;
-}
 
 // abstracting addPlayer will let us use it in other scenarios, esp. automated testing.
 function addPlayer(player, msg = undefined) {
 	if (playerList.includes(player)) {
 		if (msg != undefined) {
 			msg.reply(
-				`You are already queued up! If you would like to leave, please use ${prefix}leave`,
+				'You are already queued up! If you would like to leave, please use !leave',
 			);
 		}
 		return [...playerList];
@@ -144,12 +149,6 @@ function isAuthorizedMessage(msg) {
 	);
 }
 
-client.login(token);
-
-client.on('ready', () => {
-	console.log(`Logged in as ${client.user.tag}!`);
-});
-
 // The following is messy, but we need a mvp, so here we go
 // The function to distribute players to captains; recursive, so if it is not out of players, it can keep going
 function distributePlayers(msg, captains) {
@@ -195,60 +194,60 @@ function distribute(msg) {
 	distributePlayers(msg, captains);
 }
 
-client.on('message', (msg) => {
-	if (!msg.content.startsWith(prefix)) return;
+// client.on('message', (msg) => {
+// 	if (!msg.content.startsWith('!')) return;
 
-	const args = msg.content.slice(prefix.length).split(/ +/);
-	const command = args.shift().toLowerCase();
+// 	const args = msg.content.slice(1).split(/ +/);
+// 	const command = args.shift().toLowerCase();
 
-	if (command === 'join') {
-		playerList = join(msg);
-		console.log(playerList);
-	}
+// 	if (command === 'join') {
+// 		playerList = join(msg);
+// 		console.log(playerList);
+// 	}
 
-	if (command === 'addcaptains') {
-		if (!isAuthorizedMessage(msg)) {
-			return;
-		}
-		addCaptains(msg);
-		console.log(captainList);
-	}
+// 	if (command === 'addcaptains') {
+// 		if (!isAuthorizedMessage(msg)) {
+// 			return;
+// 		}
+// 		addCaptains(msg);
+// 		console.log(captainList);
+// 	}
 
-	if (command === 'removecaptains') {
-		if (!isAuthorizedMessage(msg)) {
-			return;
-		}
-		removeCaptains(msg);
-		console.log(captainList);
-	}
+// 	if (command === 'removecaptains') {
+// 		if (!isAuthorizedMessage(msg)) {
+// 			return;
+// 		}
+// 		removeCaptains(msg);
+// 		console.log(captainList);
+// 	}
 
-	if (command === 'ping') {
-		msg.reply('Pong!');
-	}
+// 	if (command === 'ping') {
+// 		msg.reply('Pong!');
+// 	}
 
-	if (command === 'list') {
-		msg.reply('playerList: ' + playerList.toString() + '\ncaptainList: ' + captainList.toString());
-	}
+// 	if (command === 'list') {
+// 		msg.reply('playerList: ' + playerList.toString() + '\ncaptainList: ' + captainList.toString());
+// 	}
 
-	if (command === 'distribute') {
-		if (!isAuthorizedMessage(msg)) {
-			return;
-		}
-		console.log('Distributing players, prepare yourself...');
-		distribute(msg);
-	}
+// 	if (command === 'distribute') {
+// 		if (!isAuthorizedMessage(msg)) {
+// 			return;
+// 		}
+// 		console.log('Distributing players, prepare yourself...');
+// 		distribute(msg);
+// 	}
 
-	if (command === 'reset') {
-		if (!isAuthorizedMessage(msg)) {
-			return;
-		}
-		playerList = [];
-		captainList = [];
-		msg.reply('The player and captain lists have been emptied.');
-	}
+// 	if (command === 'reset') {
+// 		if (!isAuthorizedMessage(msg)) {
+// 			return;
+// 		}
+// 		playerList = [];
+// 		captainList = [];
+// 		msg.reply('The player and captain lists have been emptied.');
+// 	}
 
-	if (command === 'leave') {
-		playerList = leave(msg);
-		console.log(playerList);
-	}
-});
+// 	if (command === 'leave') {
+// 		playerList = leave(msg);
+// 		console.log(playerList);
+// 	}
+// });

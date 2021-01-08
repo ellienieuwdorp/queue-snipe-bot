@@ -5,13 +5,12 @@
   "license": "GPL-3.0-only",
   "dependencies": {
     "discord.js": "^12.5.1",
+    "discord.js-commando": "github:discordjs/Commando",
     "envy": "^2.0.0",
     "eslint": "^7.17.0"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node src/index.js"
   },
-  "devDependencies": {
-    "prettier": "2.0.5"
-  }
+  "devDependencies": {}
 }
