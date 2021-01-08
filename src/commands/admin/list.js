@@ -11,6 +11,9 @@ module.exports = class ListCommand extends Command {
 			description: 'Lists captain and player lists.',
 		});
 	}
+	hasPermission(message) {
+		return util.isAuthorizedMessage(message);
+	}
 	run(message) {
 		message.say('Captains: ' + util.getReadableCaptainList() + '\nPlayers: ' + util.getReadablePlayerList());
 	}

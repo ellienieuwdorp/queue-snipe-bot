@@ -33,7 +33,7 @@ module.exports = {
 	},
 	removePlayer: function(player) {
 		const index = this.playerList.indexOf(player);
-		if(index === -1) {
+		if (index === -1) {
 			throw 'Attemped to remove a player from the queue that\'s not in the queue.';
 		}
 		this.playerList.splice(index, 1);
@@ -140,5 +140,13 @@ module.exports = {
 			console.log(mstr);
 			message.reply(mstr + '```');
 		}
+	},
+	// Returns true if the author of the message is privileged
+	isAuthorizedMessage: function(message) {
+		return (
+			'member' in message &&
+			(message.member.hasPermission('ADMINISTRATOR') ||
+				message.member.roles.cache.find((r) => r.name === 'Queue Snipe Admin'))
+		);
 	},
 };

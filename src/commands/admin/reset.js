@@ -11,6 +11,9 @@ module.exports = class ResetCommand extends Command {
 			description: 'Resets the player and captain lists.',
 		});
 	}
+	hasPermission(message) {
+		return util.isAuthorizedMessage(message);
+	}
 	run(message) {
 		util.resetLists();
 		message.reply('Player and captain lists have been reset.');

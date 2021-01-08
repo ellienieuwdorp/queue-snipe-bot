@@ -11,6 +11,9 @@ module.exports = class RemovePlayersCommand extends Command {
 			description: 'Removes one or more players from the player list.',
 		});
 	}
+	hasPermission(message) {
+		return util.isAuthorizedMessage(message);
+	}
 	run(message) {
 		util.removePlayers(message.mentions.users);
 		message.reply('Players have been removed from the queue!');
