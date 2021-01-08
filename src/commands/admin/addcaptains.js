@@ -11,6 +11,9 @@ module.exports = class AddCaptainsCommand extends Command {
 			description: 'Adds one or more captains to the captain list.',
 		});
 	}
+	hasPermission(message) {
+		return util.isAuthorizedMessage(message);
+	}
 	run(message) {
 		util.addCaptains(message.mentions.users);
 		message.reply('The captain list is now: ' + util.getReadableCaptainList() + '');

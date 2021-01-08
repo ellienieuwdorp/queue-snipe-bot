@@ -11,6 +11,9 @@ module.exports = class DistributeCommand extends Command {
 			description: 'Distributed and prints the teams.',
 		});
 	}
+	hasPermission(message) {
+		return util.isAuthorizedMessage(message);
+	}
 	run(message) {
 		util.distribute(message);
 	}

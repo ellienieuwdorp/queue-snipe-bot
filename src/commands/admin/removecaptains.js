@@ -11,6 +11,9 @@ module.exports = class RemoveCaptainsCommand extends Command {
 			description: 'Removes one or more captains to the captain list.',
 		});
 	}
+	hasPermission(message) {
+		return util.isAuthorizedMessage(message);
+	}
 	run(message) {
 		util.removeCaptains(message.mentions.users);
 		message.reply('The captain list is now + ' + util.getReadableCaptainList());

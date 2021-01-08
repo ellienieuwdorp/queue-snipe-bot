@@ -11,6 +11,9 @@ module.exports = class AddPlayersCommand extends Command {
 			description: 'Adds one or more players to the player list.',
 		});
 	}
+	hasPermission(message) {
+		return util.isAuthorizedMessage(message);
+	}
 	run(message) {
 		try {
 			util.addPlayers(message.mentions.users);
