@@ -5,7 +5,8 @@
   "license": "GPL-3.0-only",
   "dependencies": {
     "discord.js": "^12.5.1",
-    "envy": "^2.0.0"
+    "envy": "^2.0.0",
+    "eslint": "^7.17.0"
   },
   "scripts": {
     "start": "node index.js"
