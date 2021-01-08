@@ -1,6 +1,8 @@
 FROM node:alpine
 
-RUN apk add git
+RUN apk add --no-cache git
+RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+
 RUN mkdir -p /usr/src/bot
 WORKDIR /usr/src/bot
 
