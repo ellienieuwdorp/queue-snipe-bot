@@ -1,5 +1,6 @@
 FROM node:alpine
 
+RUN apk add git
 RUN mkdir -p /usr/src/bot
 WORKDIR /usr/src/bot
 
