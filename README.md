@@ -4,7 +4,7 @@ Discord bot intended to simplify queue sniping in Apex Legends using a system of
 
 ## Refactor TO-DO
 ### Absolutely necessary
-* Implement permission for admin commands
+* Implement permission for admin commands (done)
 ### Important
 * Make sure duplicates can't be added to the queue as in captains and players or vice versa (player can't be added to captains if they're a player, cant be added to captains if player)
 ### Afterwards
