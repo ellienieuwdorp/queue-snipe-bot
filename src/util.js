@@ -17,6 +17,9 @@ module.exports = {
 		if (this.isPlayerListFull()) {
 			throw 'The queue is full.';
 		}
+		if (this.playerList.includes(player)) {
+			throw 'Player(s) already present in queue.';
+		}
 		this.playerList = [...this.playerList, player];
 	},
 	addPlayers: function(players) {
@@ -39,6 +42,9 @@ module.exports = {
 		this.playerList.splice(index, 1);
 	},
 	addCaptain: function(captain) {
+		if (this.captainList.includes(captain)) {
+			throw 'Player(s) already present in captain list.';
+		}
 		this.captainList = [...this.captainList, captain];
 	},
 	addCaptains: function(captains) {

@@ -15,7 +15,13 @@ module.exports = class AddCaptainsCommand extends Command {
 		return util.isAuthorizedMessage(message);
 	}
 	run(message) {
-		util.addCaptains(message.mentions.users);
+		try {
+			util.addCaptains(message.mentions.users);
+		}
+		catch (error) {
+			message.reply(error);
+			return;
+		}
 		message.reply('The captain list is now: ' + util.getReadableCaptainList() + '');
 	}
 };
