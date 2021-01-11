@@ -50,6 +50,12 @@ class GameQueue {
 		}
 		this._playerList.splice(index, 1);
     }
+    
+	removePlayers(players) {
+		if (players.size > 0) {
+			players.each(player => this.removePlayer(player));
+		}
+    }
 
     addCaptain(captain) {
 		if (this._captainList.includes(captain)) {
@@ -76,12 +82,6 @@ class GameQueue {
 	removeCaptains(captains) {
 		if (captains.size > 0) {
 			captains.each(captain => this.removeCaptain(captain));
-		}
-    }
-    
-	removePlayers(players) {
-		if (players.size > 0) {
-			players.each(player => this.removePlayer(player));
 		}
     }
     
