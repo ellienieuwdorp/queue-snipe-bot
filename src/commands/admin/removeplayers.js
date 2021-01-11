@@ -16,7 +16,13 @@ module.exports = class RemovePlayersCommand extends Command {
 		return util.isAuthorizedMessage(message);
 	}
 	run(message) {
-		queue.main_queue.removePlayers(message.mentions.users);
+		try {
+			queue.main_queue.removePlayers(message.mentions.users);
+		}
+		catch (error) {
+			message.reply(error);
+			return;
+		}
 		message.reply('Players have been removed from the queue!');
 	}
 };

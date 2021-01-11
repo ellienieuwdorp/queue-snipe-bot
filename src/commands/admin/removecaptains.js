@@ -16,7 +16,13 @@ module.exports = class RemoveCaptainsCommand extends Command {
 		return util.isAuthorizedMessage(message);
 	}
 	run(message) {
-		queue.main_queue.removeCaptains(message.mentions.users);
+		try {
+			queue.main_queue.removeCaptains(message.mentions.users);
+		}
+		catch (error) {
+			message.reply(error);
+			return;
+		}
 		message.reply('The captain list is now + ' + queue.main_queue.getReadableCaptainList());
 	}
 };
