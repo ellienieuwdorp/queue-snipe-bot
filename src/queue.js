@@ -3,26 +3,26 @@ const util = require('./util.js');
 
 class GameQueue {
     constructor() {
-        this.playerList = [];
-        this.captainList = [];
+        this._playerList = [];
+        this._captainList = [];
     }
 
     get playerList() {
-        return this.playerList;
+        return this._playerList;
     }
 
     get captainList() {
-        return this.captainList;
+        return this._captainList;
     }
 
     addPlayer(player) {
 		if (this.isPlayerListFull()) {
 			throw 'The queue is full.';
 		}
-		if (this.playerList.includes(player)) {
+		if (this._playerList.includes(player)) {
 			throw 'Player(s) already present in queue.';
         }
-		this.playerList = [...this.playerList, player];
+		this._playerList = [...this._playerList, player];
     }
 
     addPlayers(players) {
@@ -33,29 +33,29 @@ class GameQueue {
     }
 
 	isPlayerListFull() {
-		return this.playerList.length >= (this.captainList.length * 2);
+		return this._playerList.length >= (this._captainList.length * 2);
     }
     
     isRoomForPlayers(amount) {
-		if ((this.captainList.length * 2) - (this.playerList.length + amount)) {
+		if ((this._captainList.length * 2) - (this._playerList.length + amount)) {
 			return false;
 		}
 		return true;
     }
 
     removePlayer(player) {
-		const index = this.playerList.indexOf(player);
+		const index = this._playerList.indexOf(player);
 		if (index === -1) {
 			throw 'Attemped to remove a player from the queue that\'s not in the queue.';
 		}
-		this.playerList.splice(index, 1);
+		this._playerList.splice(index, 1);
     }
 
     addCaptain(captain) {
-		if (this.captainList.includes(captain)) {
+		if (this._captainList.includes(captain)) {
 			throw 'Player(s) already present in captain list.';
 		}
-		this.captainList = [...this.captainList, captain];
+		this._captainList = [...this._captainList, captain];
     }
 
     addCaptains(captains) {
@@ -65,12 +65,12 @@ class GameQueue {
     }
     
 	removeCaptain(captain) {
-		const index = this.captainList.indexOf(captain);
+		const index = this._captainList.indexOf(captain);
 		if (index === -1) {
 			throw 'Attemped to remove a player from the queue that\'s not in the queue.';
 		}
 
-		this.captainList.splice(index, 1);
+		this._captainList.splice(index, 1);
     }
     
 	removeCaptains(captains) {
@@ -85,36 +85,36 @@ class GameQueue {
 		}
     }
     
-	resetLists() {
-		this.playerList = [];
-		this.captainList = [];
+	resetQueue() {
+		this._playerList = [];
+		this._captainList = [];
     }
     
 	getReadableCaptainList() {
 		const s = [];
-		this.captainList.forEach(captain => {
-			s.push(this.convertIdToTag(captain.id));
+		this._captainList.forEach(captain => {
+			s.push(util.convertIdToTag(captain.id));
 		});
-		return this.concatArray(s);
+		return util.concatArray(s);
     }
     
 	getReadablePlayerList() {
 		const s = [];
-		this.playerList.forEach(player => {
-			s.push(this.convertIdToTag(player.id));
+		this._playerList.forEach(player => {
+			s.push(util.convertIdToTag(player.id));
 		});
-		return this.concatArray(s);
+		return util.concatArray(s);
     }
     
     distribute(message) {
 		const captains = new Map();
-		this.captainList.forEach(function(v) {
+		this._captainList.forEach(function(v) {
 			captains.set(v, []);
 		});
-		this.distributePlayers(message, captains, this.playerList, this.client);
+		this.distributePlayers(message, captains, this._playerList, this.client);
     }
     
-	distributePlayers(message, captains, playerList, client) {
+	static distributePlayers(message, captains, playerList, client) {
 		captains.forEach(function(v) {
 			if (v.length < 2) {
 				console.log(playerList);
@@ -150,5 +150,5 @@ class GameQueue {
 }
 
 module.exports = {
-    queue = new GameQueue()
+    main_queue: new GameQueue()
 };

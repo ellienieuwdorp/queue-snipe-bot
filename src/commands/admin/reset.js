@@ -1,4 +1,5 @@
 const { Command } = require('discord.js-commando');
+const queue = require('./../../queue');
 const util = require('./../../util');
 
 module.exports = class ResetCommand extends Command {
@@ -15,7 +16,7 @@ module.exports = class ResetCommand extends Command {
 		return util.isAuthorizedMessage(message);
 	}
 	run(message) {
-		util.resetLists();
+		queue.main_queue.resetQueue();
 		message.reply('Player and captain lists have been reset.');
 	}
 };

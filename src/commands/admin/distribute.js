@@ -1,4 +1,5 @@
 const { Command } = require('discord.js-commando');
+const queue = require('../../queue');
 const util = require('./../../util');
 
 module.exports = class DistributeCommand extends Command {
@@ -15,6 +16,6 @@ module.exports = class DistributeCommand extends Command {
 		return util.isAuthorizedMessage(message);
 	}
 	run(message) {
-		util.distribute(message);
+		queue.main_queue.distribute(message);
 	}
 };
