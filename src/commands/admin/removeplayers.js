@@ -1,4 +1,5 @@
 const { Command } = require('discord.js-commando');
+const queue = require('./../../queue');
 const util = require('./../../util');
 
 module.exports = class RemovePlayersCommand extends Command {
@@ -15,7 +16,7 @@ module.exports = class RemovePlayersCommand extends Command {
 		return util.isAuthorizedMessage(message);
 	}
 	run(message) {
-		util.removePlayers(message.mentions.users);
+		queue.main_queue.removePlayers(message.mentions.users);
 		message.reply('Players have been removed from the queue!');
 	}
 };
