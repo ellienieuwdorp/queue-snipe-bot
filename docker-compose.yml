@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  queuesnipebot:
+    # build: https://github.com/luuknieuwdorp/community-queues.git # Use this line if you wish to build the docker image straight from the repository.
+    build: .
+    container_name: queuesnipebot
+    environment:
+      - BOT_TOKEN=YOUR_BOT_TOKEN
