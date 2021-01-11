@@ -15,7 +15,7 @@ class GameQueue {
         return this._captainList;
     }
 
-    addPlayer(player) {
+	addPlayer(player) {
 		if (this.isPlayerListFull()) {
 			throw 'The queue is full.';
 		}
@@ -25,7 +25,7 @@ class GameQueue {
 		this._playerList = [...this._playerList, player];
     }
 
-    addPlayers(players) {
+	addPlayers(players) {
 		if (!this.isRoomForPlayers()) {
 			throw 'Unable to add ' + players.length + ' players to the queue.';
 		}
@@ -36,14 +36,14 @@ class GameQueue {
 		return this._playerList.length >= (this._captainList.length * 2);
     }
     
-    isRoomForPlayers(amount) {
+	isRoomForPlayers(amount) {
 		if ((this._captainList.length * 2) - (this._playerList.length + amount)) {
 			return false;
 		}
 		return true;
     }
 
-    removePlayer(player) {
+	removePlayer(player) {
 		const index = this._playerList.indexOf(player);
 		if (index === -1) {
 			throw 'Attemped to remove a player from the queue that\'s not in the queue.';
@@ -57,14 +57,14 @@ class GameQueue {
 		}
     }
 
-    addCaptain(captain) {
+	addCaptain(captain) {
 		if (this._captainList.includes(captain)) {
 			throw 'Player(s) already present in captain list.';
 		}
 		this._captainList = [...this._captainList, captain];
     }
 
-    addCaptains(captains) {
+	addCaptains(captains) {
 		if (captains.size > 0) {
 			captains.each(captain => this.addCaptain(captain));
 		}
@@ -106,12 +106,12 @@ class GameQueue {
 		return util.concatArray(s);
     }
     
-    distribute(message) {
+	distribute(message) {
 		const captains = new Map();
 		this._captainList.forEach(function(v) {
 			captains.set(v, []);
 		});
-		this.distributePlayers(message, captains, this._playerList, this.client);
+		GameQueue.distributePlayers(message, captains, this._playerList, this.client);
     }
     
 	static distributePlayers(message, captains, playerList, client) {
