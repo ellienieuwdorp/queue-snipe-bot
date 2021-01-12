@@ -16,7 +16,7 @@ module.exports = class ResetCommand extends Command {
 		return util.isAuthorizedMessage(message);
 	}
 	run(message) {
-		queue.main_queue.resetQueue();
+		queue.mainQueue.resetQueue();
 		message.reply('Player and captain lists have been reset.');
 	}
 };

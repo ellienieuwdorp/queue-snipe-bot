@@ -17,12 +17,12 @@ module.exports = class AddCaptainsCommand extends Command {
 	}
 	run(message) {
 		try {
-			queue.main_queue.addCaptains(message.mentions.users);
+			queue.mainQueue.addCaptains(message.mentions.users);
 		}
 		catch (error) {
 			message.reply(error);
 			return;
 		}
-		message.reply('The captain list is now: ' + queue.main_queue.getReadableCaptainList() + '');
+		message.reply('The captain list is now: ' + queue.mainQueue.getReadableCaptainList() + '');
 	}
 };
