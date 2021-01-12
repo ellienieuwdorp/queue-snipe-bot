@@ -17,7 +17,7 @@ module.exports = class RemovePlayersCommand extends Command {
 	}
 	run(message) {
 		try {
-			queue.main_queue.removePlayers(message.mentions.users);
+			queue.mainQueue.removePlayers(message.mentions.users);
 		}
 		catch (error) {
 			message.reply(error);

@@ -14,7 +14,7 @@ module.exports = class LeaveCommand extends Command {
 	}
 	run(message) {
 		try {
-			queue.main_queue.removePlayer(message.author);
+			queue.mainQueue.removePlayer(message.author);
 		}
 		catch (error) {
 			message.reply(error);

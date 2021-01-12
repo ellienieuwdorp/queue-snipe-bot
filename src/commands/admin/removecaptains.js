@@ -17,12 +17,12 @@ module.exports = class RemoveCaptainsCommand extends Command {
 	}
 	run(message) {
 		try {
-			queue.main_queue.removeCaptains(message.mentions.users);
+			queue.mainQueue.removeCaptains(message.mentions.users);
 		}
 		catch (error) {
 			message.reply(error);
 			return;
 		}
-		message.reply('The captain list is now + ' + queue.main_queue.getReadableCaptainList());
+		message.reply('The captain list is now + ' + queue.mainQueue.getReadableCaptainList());
 	}
 };

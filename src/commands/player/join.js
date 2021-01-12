@@ -14,7 +14,7 @@ module.exports = class JoinCommand extends Command {
 	}
 	run(message) {
 		try {
-			queue.main_queue.addPlayer(message.author);
+			queue.mainQueue.addPlayer(message.author);
 		}
 		catch (error) {
 			message.reply(error);
