@@ -1,4 +1,5 @@
 const { Command } = require('discord.js-commando');
+const queue = require('./../../queue');
 const util = require('./../../util');
 
 module.exports = class AddCaptainsCommand extends Command {
@@ -16,12 +17,12 @@ module.exports = class AddCaptainsCommand extends Command {
 	}
 	run(message) {
 		try {
-			util.addCaptains(message.mentions.users);
+			queue.mainQueue.addCaptains(message.mentions.users);
 		}
 		catch (error) {
 			message.reply(error);
 			return;
 		}
-		message.reply('The captain list is now: ' + util.getReadableCaptainList() + '');
+		message.reply('The captain list is now: ' + queue.mainQueue.getReadableCaptainList() + '');
 	}
 };
