@@ -1,4 +1,5 @@
 const { Command } = require('discord.js-commando');
+const queue = require('./../../queue');
 const util = require('./../../util');
 
 module.exports = class AddPlayersCommand extends Command {
@@ -16,7 +17,7 @@ module.exports = class AddPlayersCommand extends Command {
 	}
 	run(message) {
 		try {
-			util.addPlayers(message.mentions.users);
+			queue.mainQueue.addPlayers(message.mentions.users);
 		}
 		catch (error) {
 			message.reply(error);

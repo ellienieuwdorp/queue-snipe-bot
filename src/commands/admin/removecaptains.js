@@ -1,11 +1,12 @@
 const { Command } = require('discord.js-commando');
+const queue = require('./../../queue');
 const util = require('./../../util');
 
 module.exports = class RemoveCaptainsCommand extends Command {
 	constructor(client) {
 		super(client, {
 			name: 'removecaptains',
-			aliases: ['removecaptains'],
+			aliases: ['removecaptain'],
 			group: 'admin',
 			memberName: 'removecaptains',
 			description: 'Removes one or more captains to the captain list.',
@@ -15,7 +16,13 @@ module.exports = class RemoveCaptainsCommand extends Command {
 		return util.isAuthorizedMessage(message);
 	}
 	run(message) {
-		util.removeCaptains(message.mentions.users);
-		message.reply('The captain list is now + ' + util.getReadableCaptainList());
+		try {
+			queue.mainQueue.removeCaptains(message.mentions.users);
+		}
+		catch (error) {
+			message.reply(error);
+			return;
+		}
+		message.reply('The captain list is now + ' + queue.mainQueue.getReadableCaptainList());
 	}
 };

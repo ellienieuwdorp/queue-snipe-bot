@@ -1,4 +1,5 @@
 const { Command } = require('discord.js-commando');
+const queue = require('./../../queue');
 const util = require('./../../util');
 
 module.exports = class LeaveCommand extends Command {
@@ -13,7 +14,7 @@ module.exports = class LeaveCommand extends Command {
 	}
 	run(message) {
 		try {
-			util.removePlayer(message.author);
+			queue.mainQueue.removePlayer(message.author);
 		}
 		catch (error) {
 			message.reply(error);
