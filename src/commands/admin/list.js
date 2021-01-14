@@ -16,6 +16,6 @@ module.exports = class ListCommand extends Command {
 		return util.isAuthorizedMessage(message);
 	}
 	run(message) {
-		message.say('Captains: ' + queue.mainQueue.getReadableCaptainList() + '\nPlayers: ' + queue.mainQueue.getReadablePlayerList());
+		message.say('Captains: ' + queue.mainQueue.getReadableCaptainList() + '\nPlayers: ' + queue.mainQueue.getReadableNonCaptainList());
 	}
 };
