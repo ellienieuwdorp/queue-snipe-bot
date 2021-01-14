@@ -1,119 +1,157 @@
 const util = require('./util.js');
 
+class Player {
+	constructor(user) {
+		// @private
+		this.discordUser_ = user;
+
+		// @private
+		this.isCaptain_ = false;
+	}
+
+	getDiscordUser() {
+		return this.discordUser_;
+	}
+
+	setCaptain() {
+		this.isCaptain_ = true;
+	}
+
+	unsetCaptain() {
+		this.isCaptain_ = false;
+	}
+
+	isCaptain() {
+		return this.isCaptain_;
+	}
+
+	shouldBeDistributed() {
+		return !this.isCaptain_;
+	}
+}
+
 class GameQueue {
 	constructor() {
 		// @private
 		this.playerList_ = [];
-
-		// @private
-		this.captainList_ = [];
 	}
 
-	getPlayerList() {
-		return this.playerList_;
-	}
-
-	getCaptainList() {
-		return this.captainList_;
-	}
-
-	addPlayer(player) {
-		if (this.isPlayerListFull()) {
-			throw 'The queue is full.';
+	/**
+	 * Tests if a used is a registered player.
+	 * @param {Discord.User} user
+	 */
+	containsPlayer(user) {
+		for(const player of this.playerList_) {
+			if(player.getDiscordUser() === user) {
+				return true;
+			}
 		}
-		if (this.playerList_.includes(player)) {
+		return false;
+	}
+
+	findPlayer(user) {
+		for(const player of this.playerList_) {
+			if(player.getDiscordUser() === user) {
+				return player;
+			}
+		}
+
+		// TODO should this throw an error?
+		return null;
+	}
+
+	addPlayer(user) {
+		if (this.containsPlayer(user)) {
 			throw 'Player(s) already present in queue.';
 		}
-		this.playerList_ = [...this.playerList_, player];
+		this.playerList_.push(new Player(user));
 	}
 
-	addPlayers(players) {
-		if (!this.isRoomForPlayers()) {
-			throw 'Unable to add ' + players.length + ' players to the queue.';
+	addPlayers(users) {
+		for(const user of users) {
+			this.addPlayer(user);
 		}
-		players.each(player => this.addPlayer(player));
 	}
 
-	isPlayerListFull() {
-		return this.playerList_.length >= (this.captainList_.length * 2);
-	}
-
-	isRoomForPlayers(amount) {
-		if ((this.captainList_.length * 2) - (this.playerList_.length + amount)) {
-			return false;
+	removePlayer(user) {
+		let index = -1;
+		for(let i = 0; i < this.playerList_.length; i++) {
+			if(this.playerList_[i].getDiscordUser() === user) {
+				index = i;
+				break;
+			}
 		}
-		return true;
-	}
 
-	removePlayer(player) {
-		const index = this.playerList_.indexOf(player);
 		if (index === -1) {
 			throw 'Attemped to remove a player from the queue that\'s not in the queue.';
 		}
 		this.playerList_.splice(index, 1);
 	}
 
-	removePlayers(players) {
-		if (players.size > 0) {
-			players.each(player => this.removePlayer(player));
+	removePlayers(users) {
+		for(const user of users) {
+			this.removePlayer(user);
 		}
 	}
 
-	addCaptain(captain) {
-		if (this.captainList_.includes(captain)) {
-			throw 'Player(s) already present in captain list.';
-		}
-		this.captainList_ = [...this.captainList_, captain];
+	setCaptain(user) {
+		this.findPlayer(user).setCaptain();
 	}
 
-	addCaptains(captains) {
-		if (captains.size > 0) {
-			captains.each(captain => this.addCaptain(captain));
+	setCaptains(users) {
+		for(const user of users) {
+			this.setCaptain(user);
 		}
 	}
 
-	removeCaptain(captain) {
-		const index = this.captainList_.indexOf(captain);
-		if (index === -1) {
-			throw 'Attemped to remove a player from the queue that\'s not in the queue.';
-		}
-
-		this.captainList_.splice(index, 1);
+	unsetCaptain(user) {
+		this.findPlayer(user).unsetCaptain();
 	}
 
-	removeCaptains(captains) {
-		if (captains.size > 0) {
-			captains.each(captain => this.removeCaptain(captain));
+	unsetCaptains(users) {
+		for(const user of users) {
+			this.unsetCaptain(user);
 		}
 	}
 
 	resetQueue() {
 		this.playerList_ = [];
-		this.captainList_ = [];
 	}
 
 	getReadableCaptainList() {
 		const s = [];
-		this.captainList_.forEach(captain => {
-			s.push(util.convertIdToTag(captain.id));
-		});
+		for(const player of this.playerList_) {
+			if(player.isCaptain()) {
+				s.push(util.convertIdToTag(player.getDiscordUser().id));
+			}
+		}
 		return util.concatArray(s);
 	}
 
-	getReadablePlayerList() {
+	getReadableNonCaptainList() {
 		const s = [];
-		this.playerList_.forEach(player => {
-			s.push(util.convertIdToTag(player.id));
-		});
+		for(const player of this.playerList_) {
+			if(!player.isCaptain()) {
+				s.push(util.convertIdToTag(player.getDiscordUser().id));
+			}
+		}
 		return util.concatArray(s);
 	}
 
 	distribute(message) {
 		const captains = new Map();
-		this.captainList_.forEach(function(v) {
-			captains.set(v, []);
-		});
-		GameQueue.distributePlayers(message, captains, this.playerList_, this.client);
+		const players = [];
+
+		for(const player of this.playerList_) {
+			if(player.isCaptain()) {
+				captains.set(player.getDiscordUser(), []);
+			}
+			else {
+				players.push(player.getDiscordUser());
+			}
+		}
+
+		GameQueue.distributePlayers(message, captains, players, util.client);
 	}
 
 	static distributePlayers(message, captains, playerList, client) {
@@ -133,9 +171,9 @@ class GameQueue {
 			let mstr = '```';
 			let i = 1;
 			captains.forEach(function(v, k) {
-				mstr = (mstr + 'Team ' + i + ': ' + client.users.cache.get(k.id).tag) + ', ';
+				mstr = (mstr + 'Team ' + i + ': ' + util.convertIdToTag(k.id)) + ', ';
 				v.forEach(function(player, i) {
-					mstr = mstr + client.users.cache.get(player.id).tag;
+					mstr = mstr + util.convertIdToTag(player.id);
 					if (i < v.length - 1) {
 						mstr = mstr + ',';
 					}
