@@ -1,6 +1,5 @@
 const { Command } = require('discord.js-commando');
 const queue = require('./../../queue');
-const util = require('./../../util');
 
 module.exports = class LeaveCommand extends Command {
 	constructor(client) {
