@@ -1,6 +1,5 @@
 const { Command } = require('discord.js-commando');
-const queue = require('./../../queue')
-const util = require('./../../util');
+const queue = require('./../../queue');
 
 module.exports = class JoinCommand extends Command {
 	constructor(client) {
