@@ -17,5 +17,20 @@ module.exports = class DistributeCommand extends Command {
 	}
 	run(message) {
 		const teams = queue.mainQueue.distribute(true);
+
+		let index = 1;
+		let response = '';
+		for(const team of teams) {
+			response = response + 'Team: ' + index + '\n```';
+			index++;
+
+			for(const player of team) {
+				response = response + util.convertIdToTag(player.getDiscordUser().id) + '\n';
+			}
+
+			response = response + '```\n\n';
+		}
+
+		message.reply(response);
 	}
 };
