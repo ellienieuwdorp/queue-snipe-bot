@@ -16,6 +16,6 @@ module.exports = class DistributeCommand extends Command {
 		return util.isAuthorizedMessage(message);
 	}
 	run(message) {
-		queue.mainQueue.distribute(message);
+		const teams = queue.mainQueue.distribute(true);
 	}
 };
