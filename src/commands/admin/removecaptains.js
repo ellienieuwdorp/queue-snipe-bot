@@ -17,7 +17,7 @@ module.exports = class RemoveCaptainsCommand extends Command {
 	}
 	run(message) {
 		try {
-			queue.mainQueue.removeCaptains(message.mentions.users);
+			queue.mainQueue.unsetCaptains(message.mentions.users.array());
 		}
 		catch (error) {
 			message.reply(error);

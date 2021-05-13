@@ -17,7 +17,7 @@ module.exports = class AddPlayersCommand extends Command {
 	}
 	run(message) {
 		try {
-			queue.mainQueue.addPlayers(message.mentions.users);
+			queue.mainQueue.addPlayers(message.mentions.users.array());
 		}
 		catch (error) {
 			message.reply(error);
