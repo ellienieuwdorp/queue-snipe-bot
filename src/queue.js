@@ -1,33 +1,33 @@
-const util = require('./util.js');
+const util = require("./util.js");
 
 class Player {
-	constructor(user) {
-		// @private
-		this.discordUser_ = user;
+    constructor(user) {
+        // @private
+        this.discordUser_ = user;
 
-		// @private
-		this.isCaptain_ = false;
-	}
+        // @private
+        this.isCaptain_ = false;
+    }
 
-	getDiscordUser() {
-		return this.discordUser_;
-	}
+    getDiscordUser() {
+        return this.discordUser_;
+    }
 
-	setCaptain() {
-		this.isCaptain_ = true;
-	}
+    setCaptain() {
+        this.isCaptain_ = true;
+    }
 
-	unsetCaptain() {
-		this.isCaptain_ = false;
-	}
+    unsetCaptain() {
+        this.isCaptain_ = false;
+    }
 
-	isCaptain() {
-		return this.isCaptain_;
-	}
+    isCaptain() {
+        return this.isCaptain_;
+    }
 
-	shouldBeDistributed() {
-		return !this.isCaptain_;
-	}
+    shouldBeDistributed() {
+        return !this.isCaptain_;
+    }
 }
 
 class GameQueue {
@@ -189,5 +189,5 @@ class GameQueue {
 }
 
 module.exports = {
-	mainQueue: new GameQueue(),
+    mainQueue: new GameQueue(),
 };
