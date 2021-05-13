@@ -1,4 +1,4 @@
-const { CommandoClient } = require('discord.js-commando');
+const { CommandoClient } = require("discord.js-commando");
 
 module.exports = {
 	client: new CommandoClient({

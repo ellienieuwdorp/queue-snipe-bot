@@ -10,6 +10,7 @@ Discord bot intended to simplify queue sniping in Apex Legends using a system of
 ### Afterwards
 * Better error handling (to be expanded)
 * Automated testing
+* Remove envy and just use native environment vars
 
 ## Manual setup instructions
 
