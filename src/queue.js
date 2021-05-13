@@ -62,7 +62,7 @@ class GameQueue {
 
 	addPlayer(user) {
 		if (this.containsPlayer(user)) {
-			throw 'Player(s) already present in queue.';
+			return;
 		}
 		this.playerList_.push(new Player(user));
 	}
