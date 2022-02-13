@@ -16,6 +16,21 @@ module.exports = class DistributeCommand extends Command {
         return util.isAuthorizedMessage(message);
     }
     run(message) {
-        queue.mainQueue.distribute(message);
+        const teams = queue.mainQueue.distribute(true);
+
+        let index = 1;
+        let response = "\n";
+        for (const team of teams) {
+            response = response + "Team: " + index + "\n```";
+            index++;
+
+            for (const player of team) {
+                response = response + util.convertIdToNick(player.getDiscordUser().id) + "\n";
+            }
+
+            response = response + "```\n\n";
+        }
+
+        message.reply(response);
     }
 };

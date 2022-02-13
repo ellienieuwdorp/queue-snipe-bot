@@ -17,7 +17,9 @@ module.exports = class AddCaptainsCommand extends Command {
     }
     run(message) {
         try {
-            queue.mainQueue.setCaptains(message.mentions.users.array());
+            let users = message.mentions.users.array();
+            queue.mainQueue.addPlayers(users);
+            queue.mainQueue.setCaptains(users);
         } catch (error) {
             message.reply(error);
             return;
