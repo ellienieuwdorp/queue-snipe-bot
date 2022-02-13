@@ -62,7 +62,7 @@ class GameQueue {
 
     addPlayer(user) {
         if (this.containsPlayer(user)) {
-            throw "Player(s) already present in queue.";
+            return;
         }
         this.playerList_.push(new Player(user));
     }
@@ -138,50 +138,53 @@ class GameQueue {
         return util.concatArray(s);
     }
 
-    distribute(message) {
-        const captains = new Map();
-        const players = [];
+    /**
+     * Generates teams and returns them as a list of player lists
+     *
+     * @param {Boolean} randomize If true randomizes the player list so that teams will be different
+     */
+    distribute(randomize) {
+        if (randomize) {
+            util.shuffle(this.playerList_);
+        }
 
+        const teams = [];
+
+        // Generate one team for each captain
         for (const player of this.playerList_) {
             if (player.isCaptain()) {
-                captains.set(player.getDiscordUser(), []);
-            } else {
-                players.push(player.getDiscordUser());
+                teams.push([player]);
             }
         }
 
-        GameQueue.distributePlayers(message, captains, players, util.client);
-    }
+        let currentTeam = 0;
 
-    static distributePlayers(message, captains, playerList, client) {
-        captains.forEach(function (v) {
-            if (v.length < 2) {
-                console.log(playerList);
-                v.push(...playerList.splice(Math.floor(Math.random() * playerList.length)));
+        // Create more teams if needed
+        if (teams.length * 3 < this.playerList_.length) {
+            // Fill empty teams at the end first
+            currentTeam = teams.length;
+
+            const newTeams = Math.ceil(this.playerList_.length / 3.0) - teams.length;
+            for (let i = 0; i < newTeams; i++) {
+                teams.push([]);
             }
-        });
-        console.log(captains);
-        if (playerList.length > 0) {
-            this.distributePlayers(message, captains, playerList, client);
-        } else {
-            let mstr = "```";
-            let i = 1;
-            captains.forEach(function (v, k) {
-                mstr = mstr + "Team " + i + ": " + util.convertIdToTag(k.id) + ", ";
-                v.forEach(function (player, i) {
-                    mstr = mstr + util.convertIdToTag(player.id);
-                    if (i < v.length - 1) {
-                        mstr = mstr + ",";
-                    }
-                    mstr = mstr + " ";
-                });
-                console.log(v);
-                mstr = mstr + "\n";
-                i++;
-            });
-            console.log(mstr);
-            message.reply(mstr + "```");
         }
+
+        // Distribute non captains to teams
+        for (const player of this.playerList_) {
+            if (!player.isCaptain()) {
+                teams[currentTeam].push(player);
+
+                currentTeam++;
+                if (currentTeam >= teams.length) {
+                    currentTeam = 0;
+                }
+            }
+        }
+
+        console.log(teams);
+
+        return teams;
     }
 }
 
